@@ -26,13 +26,13 @@ rm(list = ls())
 
 # read in the crossref/orcid merge data
 orcid_cr <- read_csv("./data/results/orcid_cr_merge.csv",
-                           col_types = cols(.default = "c"))
+                     col_types = cols(.default = "c"))
 
 # paste in your sherpa romeo API key
 # you can obtain this after creating an account,
 # logging in, and clicking the Admin tab at 
 # https://v2.sherpa.ac.uk/cgi/users/home
-sherpa_key <- "PASTE YOUR SHERPA ROMEO KEY HERE"
+sherpa_key <- "3E596E44-02D3-11ED-AEE6-A0E73307877B"
 
 # create safe, slow version of GET 
 safeslowget <- slowly(safely(GET), rate_delay(2))
@@ -77,13 +77,14 @@ romeo_response <- romeo_request %>%
 ###################################################
 romeo_df <- romeo_response %>% {
   tibble(issn_use = orcid_cr_lookup$issn_use[1:10],
-    title = map_chr(., pluck, "title", 1, "title", .default = NA_character_),
-    sherpa_id = map_chr(., pluck, "system_metadata", "id", .default = NA_character_),
-    publisher = map_chr(., pluck, "publishers", 1, "publisher", "name", 1, "name", .default = NA_character_),
-    publisher_policy = map(., pluck, "publisher_policy"),
-    call = api_url[1:10]
+         title = map_chr(., pluck, "title", 1, "title", .default = NA_character_),
+         sherpa_id = map_dbl(., pluck, "system_metadata", "id", .default = NA_integer_),
+         publisher = map_chr(., pluck, "publishers", 1, "publisher", "name", 1, "name", .default = NA_character_),
+         publisher_policy = map(., pluck, "publisher_policy"),
+         call = api_url[1:10]
   )
-}
+} %>%
+  filter(!is.na(sherpa_id))
 
 # create a list with the policies for each call.
 # one ISSN might have multiple policies.
@@ -121,57 +122,57 @@ policyid_names <- rep(policyid_vec, lengths(purrr::flatten(pubpolicy)))
 # data, collapsing it into a vector if necessary,
 # and flattening it as many times as is necessary in order to create a single vector
 
-conditions <- map_depth(pubpolicy, 3, pluck, "conditions", .default = NA) %>%
+conditions <- map_depth(pubpolicy, 3, pluck, "conditions", .ragged = TRUE, .default = NA) %>%
   modify_depth(., 3, paste, collapse = "|") %>%
   purrr::flatten() %>%
   purrr::flatten() %>%
   as_vector()
 
-oa_fee <- map_depth(pubpolicy, 3, pluck, "additional_oa_fee", .default = NA_character_) %>%
+oa_fee <- map_depth(pubpolicy, 3, pluck, "additional_oa_fee", .ragged = TRUE, .default = NA_character_) %>%
   purrr::flatten() %>%
   purrr::flatten() %>%
   as_vector()
 
-location <- map_depth(pubpolicy, 3, pluck, "location", "location", .default = NA_character_) %>%
-  modify_depth(., 3, paste, collapse = "|") %>%
-  purrr:::flatten() %>%
-  purrr::flatten() %>%
-  as_vector()
-
-
-article_version <- map_depth(pubpolicy, 3, pluck, "article_version", .default = NA_character_) %>%
+location <- map_depth(pubpolicy, 3, pluck, "location", "location", .ragged = TRUE, .default = NA_character_) %>%
   modify_depth(., 3, paste, collapse = "|") %>%
   purrr:::flatten() %>%
   purrr::flatten() %>%
   as_vector()
 
-prerequisites <- map_depth(pubpolicy, 3, pluck, "prerequisites", "prerequisite_funders", .default = NA_character_) %>%
-  map_depth(., 4, pluck, "funder_metadata", .default = NA_character_) %>%
-  map_depth(., 4, pluck, "name", 1, "name", .default = NA_character_) %>%
+
+article_version <- map_depth(pubpolicy, 3, pluck, "article_version", .ragged = TRUE, .default = NA_character_) %>%
+  modify_depth(., 3, paste, collapse = "|") %>%
+  purrr:::flatten() %>%
+  purrr::flatten() %>%
+  as_vector()
+
+prerequisites <- map_depth(pubpolicy, 3, pluck, "prerequisites", "prerequisite_funders", .ragged = TRUE, .default = NA_character_) %>%
+  map_depth(., 4, pluck, "funder_metadata", .ragged = TRUE, .default = NA_character_) %>%
+  map_depth(., 4, pluck, "name", 1, "name", .ragged = TRUE, .default = NA_character_) %>%
   modify_depth(., 3, paste, collapse = ", ") %>%
   purrr::flatten() %>%
   purrr::flatten() %>%
   as_vector()
 
-embargo_units <- map_depth(pubpolicy, 3, "embargo", .default = NA_character_) %>%
-  map_depth(., 3, pluck, "units", .default = NA_character_) %>%
+embargo_units <- map_depth(pubpolicy, 3, "embargo", .ragged = TRUE, .default = NA_character_) %>%
+  map_depth(., 3, pluck, "units", .ragged = TRUE, .default = NA_character_) %>%
   purrr::flatten() %>%
   purrr::flatten() %>%
   as_vector()
- 
-embargo_amount <- map_depth(pubpolicy, 3, "embargo", .default = NA_integer_) %>%
-  map_depth(., 3, pluck, "amount", .default = NA_integer_) %>%
+
+embargo_amount <- map_depth(pubpolicy, 3, "embargo", .ragged = TRUE, .default = NA_integer_) %>%
+  map_depth(., 3, pluck, "amount", .ragged = TRUE, .default = NA_integer_) %>%
   purrr::flatten() %>%
   purrr::flatten() %>%
   as_vector()
- 
+
 embargo <- paste(embargo_amount, embargo_units) %>%
   replace(.,
           which(. == "NA NA"),
           "No embargo")
 
-license <- map_depth(pubpolicy, 3, "license", .default = NA_character_) %>%
-  map_depth(., 4, pluck, "license", .default = NA_character_) %>%
+license <- map_depth(pubpolicy, 3, "license", .ragged = TRUE, .default = NA_character_) %>%
+  map_depth(., 4, pluck, "license", .ragged = TRUE, .default = NA_character_) %>%
   modify_depth(., 3, paste, collapse = ", ") %>%
   purrr::flatten() %>%
   purrr::flatten() %>%
@@ -180,16 +181,16 @@ license <- map_depth(pubpolicy, 3, "license", .default = NA_character_) %>%
 
 # pull all of these together into a tibble and join it to the linking table so we can then join it to the original file
 romeo_results <- tibble(policyid_names,
-              article_version,
-              conditions,
-              oa_fee,
-              location,
-              prerequisites,
-              embargo_units,
-              embargo_amount,
-              embargo,
-              license) %>%
-  left_join(issn_policy, by = c("policyid_names" = "policyid_vec"))
+                        article_version,
+                        conditions,
+                        oa_fee,
+                        location,
+                        prerequisites,
+                        embargo_units,
+                        embargo_amount,
+                        embargo,
+                        license) %>%
+  left_join(issn_policy, by = c("policyid_names" = "policyid_vec"), relationship = "many-to-many")
 
 # join the sherpa data to our crossref/orcid file
 # there are some duplicates within these because there

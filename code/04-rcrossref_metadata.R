@@ -170,6 +170,7 @@ issued_plot <- orcid_cr_merge %>%
   mutate(issued_fix = str_sub(issued, start = 1, end = 7),
          issued_fix = ym(issued_fix)) %>%
   count(issued_fix) %>%
+  filter(!is.na(issued_fix)) %>%
   ggplot(aes(x = issued_fix, y = n)) + 
   geom_line()
 print(issued_plot)
