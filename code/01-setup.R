@@ -92,6 +92,8 @@ usethis::edit_r_environ()
 # ORCID_TOKEN="my-token"
 # replace 'my-token' with the access_token you just copied. 
 # Then press enter to create a new line.
+
+
 # while we are here, we'll add in our rcrossref credentials
 # type crossref_email="name@example.com", using your own email address.
 # press enter to create a new line, and leave it blank. 
@@ -107,7 +109,7 @@ rorcid::orcid_auth()
 
 # 1. Create an account with Sherpa-Romeo at https://v2.sherpa.ac.uk/cgi/register
 # 2. Click the Admin button. Your API key will be displayed. We will use this in 06
-
+# 3. For now, paste it here: 
 
 # find your institution's identifiers -------------------------------------
 
@@ -115,3 +117,10 @@ rorcid::orcid_auth()
 # Start typing your institution. When it appears, click it. Click Save changes.
 # On your orcid profile, click Show more detail. Your institution’s Ringgold ID will be displayed. 
 # You can also look it up in the Ringgold database but you must register to use this service.
+# add in as many identifiers as you can find:
+
+# Ringgold ID:
+# GRID:
+# ROR:
+
+

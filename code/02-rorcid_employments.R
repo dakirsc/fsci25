@@ -197,8 +197,8 @@ my_orcid_person <- rorcid::orcid_person(unique_orcids)
 my_orcid_person_data <- my_orcid_person %>% {
   dplyr::tibble(
     given_name = purrr::map_chr(., purrr::pluck, "name", "given-names", "value", .default=NA_character_),
-    created_date = purrr::map_chr(., purrr::pluck, "name", "created-date", "value", .default=NA_integer_),
-    last_modified_date = purrr::map_chr(., purrr::pluck, "name", "created-date", "value", .default=NA_character_),
+    created_date = purrr::map_dbl(., purrr::pluck, "name", "created-date", "value", .default=NA_integer_),
+    last_modified_date = purrr::map_dbl(., purrr::pluck, "name", "created-date", "value", .default=NA_character_),
     family_name = purrr::map_chr(., purrr::pluck, "name", "family-name", "value", .default=NA_character_),
     credit_name = purrr::map_chr(., purrr::pluck, "name", "credit-name", "value", .default=NA_character_),
     other_names = purrr::map(., purrr::pluck, "other-names", "other-name", "content", .default=NA_character_),
