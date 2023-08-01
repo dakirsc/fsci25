@@ -134,6 +134,10 @@ my_organizations <- my_employment_data %>%
 my_organizations_filtered <- my_organizations %>%
   filter(str_detect(organization_name, "KEYWORD"))
 
+################################################################
+# WHEN YOU RUN THIS ON YOUR OWN, REPLACE THE NUMBERS in c()    #
+# WITH NUMBERS CORRESPONDING TO INSTITUTIONS IN FILTERED ABOVE #
+################################################################
 # filter the dataset to include only the institutions you want. 
 # There may be different variants depending on if the person
 # hand-entered the data. Referring to the my_organizations_filtered
