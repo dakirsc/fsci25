@@ -75,7 +75,7 @@ dois_not_found <- orcid_cr_merge[1:20, ] %>%
 # data frame, and bind (_dfr) the rows together
 dois_oa_df <- dois_oa %>%
   map(pluck, "result") %>%
-  .[!map_lgl(., is_empty)] %>%
+  discard(is_empty) %>%
   map_dfr(., flatten) %>%
   clean_names() 
 

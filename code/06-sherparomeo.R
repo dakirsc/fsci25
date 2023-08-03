@@ -32,7 +32,7 @@ orcid_cr <- read_csv("./data/results/orcid_cr_merge.csv",
 # you can obtain this after creating an account,
 # logging in, and clicking the Admin tab at 
 # https://v2.sherpa.ac.uk/cgi/users/home
-sherpa_key <- "3E596E44-02D3-11ED-AEE6-A0E73307877B"
+sherpa_key <- "ENTER YOUR KEY HERE"
 
 # create safe, slow version of GET 
 safeslowget <- slowly(safely(GET), rate_delay(2))
