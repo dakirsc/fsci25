@@ -33,7 +33,9 @@ orcid_cr_merge <- read_csv("./data/results/orcid_cr_merge.csv",
 my_email <- "TYPE YOUR EMAIL ADDRESS HERE"
 
 # create a slow oadoi_fetch call to be used during this class
-slow_oadoi_fetch <- slowly(oadoi_fetch, rate_delay(2))
+# after class you can replace the 2 with a 0.
+# also wrap the function in safely() so if there is a problem, it won't break the entire loop.
+slow_oadoi_fetch <- safely(slowly(oadoi_fetch, rate_delay(2)))
 
 ###################################################
 ## When you run this on your own after the class,##
@@ -69,9 +71,11 @@ warnings()
 dois_not_found <- orcid_cr_merge[1:20, ] %>%
   filter(map_lgl(dois_oa, is_empty))
 
-# loop through (map) the returned results, extract (flatten) the 
+# loop through (map) the returned results, remove empty items, extract (flatten) the 
 # data frame, and bind (_dfr) the rows together
 dois_oa_df <- dois_oa %>%
+  map(pluck, "result") %>%
+  .[!map_lgl(., is_empty)] %>%
   map_dfr(., flatten) %>%
   clean_names() 
 
