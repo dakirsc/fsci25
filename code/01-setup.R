@@ -144,6 +144,7 @@ rorcid::orcid_auth()
 d <- diamonds
 
 # use unique() and $ to view the unique values in the cut column
+unique(d$cut)
 
 # use mean() to get the mean of carat.
 mean(d$carat)
