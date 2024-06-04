@@ -21,11 +21,11 @@ library(inops)
 
 # build the query  --------------------------------------------------------
 
-ringgold_id <- "enter your institution's ringgold" 
+# ringgold_id <- "enter your institution's ringgold" 
 email_domain <- "enter your institution's email domain" 
 organization_name <- "enter your organization's name"
-# grid_id <- "enter your institution's grid ID" 
-# ror_id <- "enter your institution's ROR ID"
+# grid_id <- "enter your institution's grid ID" (now retired)
+ror_id <- "enter your institution's ROR ID"
 
 
 # example
@@ -37,13 +37,12 @@ organization_name <- "enter your organization's name"
 
 
 # create the query
-my_query <- glue('ringgold-org-id:',
-                 ringgold_id,
-                 ' OR email:*',
-                 email_domain,
-                 ' OR affiliation-org-name:"',
-                 organization_name,
-                 '"')
+my_query <- glue('ror-org-id:"', 
+                 ror_id, 
+                 '" OR email:*', 
+                 email_domain, 
+                 ' OR affiliation-org-name:"', 
+                 organization_name, '"')
 
 # here is the query you will use if you found your
 # institution's GRID and ROR IDs.
