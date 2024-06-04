@@ -29,8 +29,8 @@ dois_unduped <- read_csv("./data/results/orcid_dois.csv")
 # We start by subsetting our unduped dois to include only the year 2021.
 # I had 11,000 DOIs and that's just too many to do all at once. 
 # If you have a large amount of data, you might break it down for 2-3 year chunks
-dois_2021 <- dois_unduped %>%
-  filter(publication_date_year_value >= 2021)
+dois_2023 <- dois_unduped %>%
+  filter(publication_date_year_value >= 2023)
 
 # we wrap the cr_works in slowly and put a delay of 2 seconds after each call
 # normally you don't need to do this, but since everyone in the class will be
@@ -44,7 +44,7 @@ slow_cr_works <- slowly(cr_works, rate_delay(2))
 # send the request
 # return the result
 # pause the system for 0.5 seconds
-metadata_2021 <- map(dois_2021$doi, function(z) {
+metadata_2023 <- map(dois_2023$doi, function(z) {
   print(z)
   o <- slow_cr_works(dois = z)
   return(o)
@@ -63,32 +63,32 @@ metadata_2021 <- map(dois_2021$doi, function(z) {
 # This will loop through each result, extract ("pluck") the object called "data"
 # bind it together into a dataframe (the "dfr" part of map_dfr)
 # clean the names up and filter to remove any duplicates
-metadata_2021_df <- metadata_2021 %>%
+metadata_2023_df <- metadata_2023 %>%
   map_dfr(., pluck("data")) %>%
   clean_names() %>%
   filter(!duplicated(doi))
 
 # We next want to prepare our orcid data frame to merge to the crossref data by selecting only the relevant columns
-orcid_merge <- dois_2021 %>%
+orcid_merge <- dois_2023 %>%
   select(orcid_identifier, doi, given_name, family_name)
 
 # Have a look at the names of the columns to see which ones we might want to keep
-View(as.data.frame(names(metadata_2021_df)))
+View(as.data.frame(names(metadata_2023_df)))
 
 # unnest the link list, keep the links for application/pdf
 # this will be used if you choose to do text mining after the class
-linklist <- metadata_2021_df %>%
+linklist <- metadata_2023_df %>%
   unnest(link) %>%
   filter(content.type == "application/pdf" | content.type == "unspecified",
          !duplicated(doi)) %>%
   select(doi, URL) %>%
   rename(pdf_url = URL)
 
-metadata_2021_df <- metadata_2021_df %>%
+metadata_2023_df <- metadata_2023_df %>%
   left_join(linklist, by = "doi")
 
 # select relevant columns
-cr_merge <- metadata_2021_df %>%
+cr_merge <- metadata_2023_df %>%
   select(any_of(c("doi",
                 "title",
                 "published_print", 
