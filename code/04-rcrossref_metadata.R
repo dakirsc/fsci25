@@ -26,11 +26,11 @@ rm(list = ls())
 
 dois_unduped <- read_csv("./data/results/orcid_dois.csv")
 
-# We start by subsetting our unduped dois to include only the year 2021.
+# We start by subsetting our unduped dois to include only the years 2022-2024.
 # I had 11,000 DOIs and that's just too many to do all at once. 
 # If you have a large amount of data, you might break it down for 2-3 year chunks
-dois_2023 <- dois_unduped %>%
-  filter(publication_date_year_value >= 2023)
+dois_2022 <- dois_unduped %>%
+  filter(publication_date_year_value >= 2022)
 
 # we wrap the cr_works in slowly and put a delay of 2 seconds after each call
 # normally you don't need to do this, but since everyone in the class will be
@@ -44,17 +44,17 @@ slow_cr_works <- slowly(cr_works, rate_delay(2))
 # send the request
 # return the result
 # pause the system for 0.5 seconds
-metadata_2023 <- map(dois_2023$doi, function(z) {
+metadata_2022 <- map(dois_2022$doi, function(z) {
   print(z)
   o <- slow_cr_works(dois = z)
   return(o)
 })
 
 # optional:  write the json file to disk so you have it
-# write_json(metadata_2021, "./data/processed/metadata_2021.json")
+# write_json(metadata_2022, "./data/processed/metadata_2022.json")
 
 # read json, if necessary
-# metadata_2021_df <- read_json("./data/processed/metadata_2021.json", simplifyVector = TRUE) %>%
+# metadata_2022_df <- read_json("./data/processed/metadata_2022.json", simplifyVector = TRUE) %>%
 #   pluck("data") %>%
 #   bind_rows() %>%
 #   clean_names() %>%
@@ -63,32 +63,32 @@ metadata_2023 <- map(dois_2023$doi, function(z) {
 # This will loop through each result, extract ("pluck") the object called "data"
 # bind it together into a dataframe (the "dfr" part of map_dfr)
 # clean the names up and filter to remove any duplicates
-metadata_2023_df <- metadata_2023 %>%
+metadata_2022_df <- metadata_2022 %>%
   map_dfr(., pluck("data")) %>%
   clean_names() %>%
   filter(!duplicated(doi))
 
 # We next want to prepare our orcid data frame to merge to the crossref data by selecting only the relevant columns
-orcid_merge <- dois_2023 %>%
+orcid_merge <- dois_2022 %>%
   select(orcid_identifier, doi, given_name, family_name)
 
 # Have a look at the names of the columns to see which ones we might want to keep
-View(as.data.frame(names(metadata_2023_df)))
+View(as.data.frame(names(metadata_2022_df)))
 
 # unnest the link list, keep the links for application/pdf
 # this will be used if you choose to do text mining after the class
-linklist <- metadata_2023_df %>%
+linklist <- metadata_2022_df %>%
   unnest(link) %>%
   filter(content.type == "application/pdf" | content.type == "unspecified",
          !duplicated(doi)) %>%
   select(doi, URL) %>%
   rename(pdf_url = URL)
 
-metadata_2023_df <- metadata_2023_df %>%
+metadata_2022_df <- metadata_2022_df %>%
   left_join(linklist, by = "doi")
 
 # select relevant columns
-cr_merge <- metadata_2023_df %>%
+cr_merge <- metadata_2022_df %>%
   select(any_of(c("doi",
                 "title",
                 "published_print", 
