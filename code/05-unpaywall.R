@@ -101,6 +101,7 @@ best_oa <- oa_only %>%
 # here in RStudio
 best_oa_merge <- best_oa %>%
   filter(!duplicated(doi)) %>%
+  # select(across(everything()),negate(is.list)) fix superseded function
   select_if(purrr::negate(is.list))
 
 # now that we have the best OA location, we can merge this back to our ORCID/Crossref file
@@ -125,6 +126,8 @@ oa_colors <- c("bronze" = "#D55E00",
                "gold" = "#F0E442",
                "green" = "#009E73", 
                "hybrid" = "#E69F00")
+
+my_colors <- oa_colors[names(oa_colors) %in% dois_oa_df$oa_status]
 
 # plot OA status histogram
 dois_oa_df %>%
