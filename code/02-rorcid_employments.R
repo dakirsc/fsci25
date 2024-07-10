@@ -104,10 +104,7 @@ View(my_employment)
 my_employment_data <- my_employment %>%
   purrr::map(., purrr::pluck, "affiliation-group", "summaries") %>% 
   purrr::flatten_dfr() %>%
-  janitor::clean_names() %>%
-  dplyr::mutate(employment_summary_end_date = anytime::anydate(employment_summary_end_date/1000),
-                employment_summary_created_date_value = anytime::anydate(employment_summary_created_date_value/1000),
-                employment_summary_last_modified_date_value = anytime::anydate(employment_summary_last_modified_date_value/1000))
+  janitor::clean_names() 
 
 # View it
 View(my_employment_data)
@@ -131,7 +128,7 @@ my_organizations <- my_employment_data %>%
 # If you are adding more than one keyword, separate them by a pipe (|)
 # for example, "Oklahoma|Okla"
 my_organizations_filtered <- my_organizations %>%
-  filter(str_detect(organization_name, "KEYWORD"))
+  filter(str_detect(organization_name, "KEYWORD")) 
 
 ################################################################
 # WHEN YOU RUN THIS ON YOUR OWN, REPLACE THE NUMBERS in c()    #
