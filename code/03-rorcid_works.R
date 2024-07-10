@@ -27,7 +27,7 @@ rm(list = ls())
 orcid_ids <- read_csv("./data/results/orcid_employment_file.csv",
                       col_types = cols(.default = "c"))
 
-# create a vector of unique, unduplicated ORCID IDs from that file
+# create a vector of unique, deduplicated ORCID IDs from that file
 my_orcids <- orcid_ids %>%
   filter(!duplicated(orcid_identifier_path)) %>%
   pull(orcid_identifier_path) %>%
