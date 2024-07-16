@@ -95,6 +95,8 @@ linklist <- metadata_2022_df %>%
   select(doi, URL) %>%
   rename(pdf_url = URL)
 
+# left_join() keeps all observations in 1st data frame (x)
+# even if there is no matching value in 2nd data frame (y)
 metadata_2022_df <- metadata_2022_df %>%
   left_join(linklist, by = "doi")
 
