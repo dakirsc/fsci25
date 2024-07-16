@@ -148,7 +148,8 @@ rorcid::orcid_auth()
 
 
 
-
+# loading in a dataset from the ggplot2 package
+# lists prices of 50,000+ round cut diamonds
 d <- diamonds
 
 # use unique() and $ to view the unique values in the cut column
@@ -193,6 +194,7 @@ got_chars <- got_chars
 
 jsonedit(got_chars, mode = "view", elementId = "got_chars")
 
+# to start list at 1 instead of 0
 jsonedit(number_unnamed(got_chars), mode = "view", elementId = "got_chars")
 
 
@@ -221,6 +223,7 @@ map(got_chars[5:8], 3)
 # piping
 got_chars %>%
   map("name")
+
 got_chars %>%
   map(3)
 
@@ -228,6 +231,7 @@ got_chars %>%
 # map_chr will return results as a character vector
 map_chr(got_chars[9:12], "name")
 
+# compare to just map(got_chars[9:12], "name")
 
 # rectangling: manually create data frame from list
 got_chars_df <- got_chars %>% {
