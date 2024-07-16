@@ -68,6 +68,16 @@ romeo_response <- romeo_request %>%
   map(., content) %>%
   map(., pluck, "items", 1) 
 
+# view JSON file
+# NOTE: even though number_unnamed() ensures the top level of the list
+# starts at 1 (instead of 0), 
+# subsequent levels of the list start with 0 in this viewing mode
+jsonedit(number_unnamed(romeo_response), mode = "view")
+
+# if we instead view the file through a tab in RStudio, 
+# we can see that subsequent list levels actually start at 1
+View(romeo_response)
+
 # create a data frame with some pertinent datapoints
 ###################################################
 ## When you run this on your own after the class,##
@@ -85,6 +95,10 @@ romeo_df <- romeo_response %>% {
   )
 } %>%
   filter(!is.na(sherpa_id))
+
+# view publisher policy column using jsonedit
+jsonedit(number_unnamed(romeo_df$publisher_policy),
+         mode = "view")
 
 # create a list with the policies for each call.
 # one ISSN might have multiple policies.
@@ -121,6 +135,9 @@ policyid_names <- rep(policyid_vec, lengths(purrr::flatten(pubpolicy)))
 # Each of the following retrieves (plucks) the desired
 # data, collapsing it into a vector if necessary,
 # and flattening it as many times as is necessary in order to create a single vector
+
+# view pubpolicy using jsonedit
+jsonedit(number_unnamed(pubpolicy), mode = "view")
 
 conditions <- map_depth(pubpolicy, 3, pluck, "conditions", .ragged = TRUE, .default = NA) %>%
   modify_depth(., 3, paste, collapse = "|") %>%
