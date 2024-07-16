@@ -254,5 +254,36 @@ dept_plot <- dept_tally %>%
 
 print(dept_plot)
 
+# exploring roles
+
+# NOTE: roles are free text, so your data may not be at all similar
+# it may also be beneficial to maintain the language user use
+# to describe themselves
+# depending on what your interest is
+roles <- orcid_person_employment_join %>%
+  mutate(role_title = ifelse(role_title %in% c("Graduate Research Assistant",
+                                               "GRA","Graduate Assistant",
+                                               "Graduate Research Associate",
+                                               "Graduate Research and Teaching Assistant",
+                                               "Graduate Student and Research Assistant",
+                                               "Master's Student",
+                                               "PhD Student"),
+                             "Graduate Student",role_title),
+         role_title = tolower(role_title),
+         role_title = str_remove_all(role_title, "[[:punct:]]"))
+
+role_tally <- roles %>% 
+  group_by(role_title) %>% 
+  tally() %>% 
+  arrange(desc(n)) %>% 
+  filter(!is.na(role_title))
+
+role_plot <- role_tally %>%
+  filter(n >= 2) %>%
+  ggplot(aes(x = fct_reorder(role_title, n), y = n)) + 
+  geom_bar(stat = "identity") +
+  coord_flip()
+
+print(role_plot)
 
 
