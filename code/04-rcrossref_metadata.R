@@ -27,8 +27,16 @@ rm(list = ls())
 dois_unduped <- read_csv("./data/results/orcid_dois.csv")
 
 # We start by subsetting our unduped dois to include only the years 2022-2024.
-# I had 11,000 DOIs and that's just too many to do all at once. 
+# depending on how many publications your subset of authors has
+# you may have just too many to do all at once. 
 # If you have a large amount of data, you might break it down for 2-3 year chunks
+
+# for my data, this is the year breakdown
+dois_unduped %>% 
+  group_by(publication_date_year_value) %>% 
+  count() %>% 
+  arrange(desc(publication_date_year_value))
+
 dois_2022 <- dois_unduped %>%
   filter(publication_date_year_value >= 2022)
 
