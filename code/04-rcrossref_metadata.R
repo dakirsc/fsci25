@@ -68,6 +68,9 @@ metadata_2022 <- map(dois_2022$doi, function(z) {
 #   clean_names() %>%
 #   filter(!duplicated(doi))
 
+# first, we need to pluck out the "data" portion of our resulting file
+jsonedit(number_unnamed(metadata_2022), mode = "view", elementId = NULL)
+
 # This will loop through each result, extract ("pluck") the object called "data"
 # bind it together into a dataframe (the "dfr" part of map_dfr)
 # clean the names up and filter to remove any duplicates
@@ -120,8 +123,13 @@ cr_merge <- metadata_2022_df %>%
                 "author",
                 "pdf_url")))
 
-# The authors are in a nested list. In order to collect them into a single value, we must
-# unnest the list,
+# The authors are in a nested list. In order to collect them into a single value, 
+# we must unnest the list
+# but first, we can view what the author column looks like
+# in its nested form to understand how the unnesting works
+jsonedit(number_unnamed(cr_merge$author),mode = "view")
+
+# to unnest this list,
 # create a new column full_name that pastes together the first name and the last name
 # group the dataset by doi so we can collect each author per article
 # create a new column all_auths that pastes together the authors from each article and separates them with a comma
