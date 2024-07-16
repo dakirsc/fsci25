@@ -45,7 +45,7 @@ my_works <- rorcid::orcid_works(my_orcids)
 ## my_works <- read_json("./data/raw/my_works.json", simplifyVector = TRUE)
 
 # view the JSON file to understand how we are extracting information
-jsonedit(my_works, mode = "view", elementId = NULL)
+jsonedit(number_unnamed(my_works), mode = "view", elementId = NULL)
 
 # turn the JSON file into a unique data frame by looping through the file,
 # extracting ("pluck") the object, bind the rows together with(this is the "_dfr" part of map_dfr)
