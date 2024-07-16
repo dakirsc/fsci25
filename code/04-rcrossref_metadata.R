@@ -184,6 +184,9 @@ top_cited <- orcid_cr_merge %>%
   arrange(desc(is_referenced_by_count))
 
 # line plot of publication date (issued)
+
+# ym() will fail to parse cetain dates
+# if those dates list only years
 issued_plot <- orcid_cr_merge %>%
   mutate(issued_fix = str_sub(issued, start = 1, end = 7),
          issued_fix = ym(issued_fix)) %>%
