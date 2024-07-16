@@ -196,3 +196,33 @@ issued_plot <- orcid_cr_merge %>%
   geom_line()
 print(issued_plot)
 
+# published_print VS published_online
+# original data gives dates, but we just want a "Yes" or "No"
+# statement indicating whether an item has a physical or digital
+# publication
+orcid_cr_merge %>% 
+  mutate(pub_print_YN = ifelse(is.na(published_print),"N","Y"),
+         pub_online_YN = ifelse(is.na(published_online),"N","Y")) %>% 
+  group_by(pub_print_YN,pub_online_YN) %>% 
+  count()
+
+# how many printed?
+orcid_cr_merge %>% 
+  mutate(pub_print_YN = ifelse(is.na(published_print),"N","Y"),
+         pub_online_YN = ifelse(is.na(published_online),"N","Y")) %>% 
+  ggplot(aes(x = pub_print_YN,
+             fill = pub_print_YN)) +
+  geom_bar()
+
+# how many online?
+orcid_cr_merge %>% 
+  mutate(pub_print_YN = ifelse(is.na(published_print),"N","Y"),
+         pub_online_YN = ifelse(is.na(published_online),"N","Y")) %>% 
+  ggplot(aes(x = pub_online_YN,
+             fill = pub_online_YN)) +
+  geom_bar()
+
+# publisher
+orcid_cr_merge %>% 
+  count(publisher) %>% 
+  arrange(desc(n))
