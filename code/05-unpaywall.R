@@ -138,3 +138,24 @@ dois_oa_df %>%
   geom_histogram(stat = "count", fill = oa_colors,
                  color = "black")
 
+# has_repository_copy
+tabyl(dois_oa_df$has_repository_copy)
+
+dois_oa_df %>% 
+  ggplot(aes(x = year, 
+             fill = has_repository_copy)) +
+  geom_bar()
+
+# journal_is_oa
+tabyl(dois_oa_df$journal_is_oa)
+
+dois_oa_df %>% 
+  ggplot(aes(x = year, 
+             fill = journal_is_oa)) +
+  geom_bar()
+
+# year
+dois_oa_df %>% 
+  ggplot(aes(x = year, 
+             fill = is_oa)) +
+  geom_bar()
