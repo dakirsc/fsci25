@@ -68,6 +68,9 @@ warnings()
 ### DELETE THE [1:20, ] WHEN YOU ARE RUNNING THIS AFTER CLASS ###
 #################################################################
 
+# view the JSON file
+jsonedit(number_unnamed(dois_oa), mode = "view")
+
 dois_not_found <- orcid_cr_merge[1:20, ] %>%
   filter(map_lgl(dois_oa, is_empty))
 
