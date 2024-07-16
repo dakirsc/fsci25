@@ -131,12 +131,10 @@ rorcid::orcid_auth()
 
 # Sign in to your ORCID account and scroll down to Employment. Click the Add button.
 # Start typing your institution. When it appears, click it. Click Save changes.
-# On your orcid profile, click Show more detail. Your institution’s Ringgold ID will be displayed. 
-# You can also look it up in the Ringgold database but you must register to use this service.
+# On your orcid profile, click Show more detail. Your institution’s ROR ID should be displayed. 
+# You can also look it up in the ROR database (https://ror.org)
 # add in as many identifiers as you can find:
 
-# Ringgold ID:
-# GRID:
 # ROR:
 
 
