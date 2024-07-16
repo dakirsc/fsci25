@@ -68,6 +68,12 @@ my_works_externalIDs <- my_works_data %>%
   tidyr::unnest(external_ids_external_id) %>%
   clean_names()
 
+# you can quickly visualize the types of external IDs 
+# and how many of each type are available
+my_works_externalIDs %>% 
+  group_by(external_id_type) %>% 
+  count()
+
 
 # From those unnested external IDs, we want to keep only those with a DOI, as that is the 
 # value we'll use to look up the items in Crossref and Unpaywall.
