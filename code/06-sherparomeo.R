@@ -114,6 +114,7 @@ publisher_policyid <- romeo_df$publisher_policy %>%
 policyid_vec <- publisher_policyid %>%
   purrr::flatten() %>%
   as_vector()
+
 issn_vec <- rep(romeo_df$issn_use[!is.na(romeo_df$sherpa_id)], lengths(publisher_policyid))
 
 issn_policy <- tibble(policyid_vec,
