@@ -99,7 +99,7 @@ View(my_employment)
 # my_employment <- read_json("./data/processed/employment.json", simplifyVector = TRUE)
 
 # preview the structure of the JSON file before we extract things
-jsonedit(my_employment, mode = "view", elementId = NULL)
+jsonedit(number_unnamed(my_employment), mode = "view", elementId = NULL)
 
 # extract the employment data and mutate the dates
 my_employment_data <- my_employment %>%
@@ -193,7 +193,7 @@ unique_orcids <- unique(current_employment_all$orcid_identifier) %>%
 my_orcid_person <- rorcid::orcid_person(unique_orcids)
 
 # view this JSON file as well
-# jsonedit(my_orcid_person, mode = "view", elementId = NULL)
+# jsonedit(number_unnamed(my_orcid_person), mode = "view", elementId = NULL)
 
 # then we construct a data frame from the response. 
 # See more at https://ciakovx.github.io/rorcid.html#Getting_the_data_into_a_data_frame for this.
