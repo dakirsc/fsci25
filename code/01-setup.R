@@ -68,6 +68,11 @@ orcid_client_id <- "PASTE MY CLIENT ID HERE"
 # copy/paste your client secret from https://orcid.org/developer-tools
 orcid_client_secret <- "PASTE MY CLIENT SECRET HERE"
 
+# Alternatively, to ensure private information remains private
+# (especially when sharing code with others)
+# install.packages("rstudioapi")
+# library(rstudioapi)
+# rstudioapi::askForPassword('ORCID Client Secret:')
 
 orcid_request <- POST(url  = "https://orcid.org/oauth/token",
                       config = add_headers(`Accept` = "application/json",
@@ -93,6 +98,8 @@ print(orcid_response$access_token)
 # Run this code:
 usethis::edit_r_environ()
 
+
+
 # A new window will open in RStudio.
 # In this separate R environment page, type the following (except the pound sign):
 # ORCID_TOKEN="my-token"
@@ -110,12 +117,15 @@ usethis::edit_r_environ()
 #You can confirm this by calling orcid_auth(), and it will print the token
 rorcid::orcid_auth()
 
-
 # configure sherpa-romeo --------------------------------------------------
 
 # 1. Create an account with Sherpa-Romeo at https://v2.sherpa.ac.uk/cgi/register
 # 2. Click the Admin button. Your API key will be displayed. We will use this in 06
 # 3. For now, paste it here: 
+
+# to avoid sharing private information in shared code:
+# rstudioapi::askForPassword('Sherpa-Romeo API Key:')
+
 
 # find your institution's identifiers -------------------------------------
 
