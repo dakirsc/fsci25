@@ -135,6 +135,6 @@ my_colors <- oa_colors[names(oa_colors) %in% dois_oa_df$oa_status]
 # plot OA status histogram
 dois_oa_df %>%
   ggplot(., aes(x = oa_status)) +
-  geom_histogram(stat = "count", fill = oa_colors)
-
+  geom_histogram(stat = "count", fill = oa_colors,
+                 color = "black")
 
