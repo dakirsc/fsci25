@@ -113,6 +113,8 @@ usethis::edit_r_environ()
 # Press Ctrl + S (Mac: Cmd + S) to save this information to your R environment and close the window. You won't see anything happen here because it is just saving the page.
 # Click Session > Restart R. Your token should now be saved to your R environment. 
 
+# You will need to reload all packages after restarting R
+
 
 #You can confirm this by calling orcid_auth(), and it will print the token
 rorcid::orcid_auth()
