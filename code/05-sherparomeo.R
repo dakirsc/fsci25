@@ -28,7 +28,7 @@ library(patchwork)
 rm(list = ls())
 
 # read in the crossref/orcid merge data
-oa_works_orcid <- read_csv("./data/results/openalex_orcid_works.csv",
+oa_works_author <- read_csv("./data/results/openalex_works_author_collated.csv",
                      col_types = cols(.default = "c"))
 
 # paste in your sherpa romeo API key
@@ -41,7 +41,7 @@ sherpa_key <- "ENTER YOUR KEY HERE"
 safeslowget <- slowly(safely(GET), rate_delay(2))
 
 # create a  list with unique issns
-oa_issn_lookup <- oa_works_orcid %>%
+oa_issn_lookup <- oa_works_author %>%
   filter(!is.na(issn_l),
          !duplicated(issn_l)) 
 

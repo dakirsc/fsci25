@@ -190,7 +190,7 @@ for(orcid in 1:40){
 
 # relocate order of columns
 oa_authors <- oa_authors %>% 
-  select(doi, orcid_index, work_index, author_index,
+  select(doi, orcid_search, orcid_index, work_index, author_index,
          title, work_type, publication_year, source_display_name,
          author_display_name, orcid, is_corresponding,
          affil_display_name, ror, affil_type,everything())
@@ -212,7 +212,7 @@ author_collated <- oa_authors %>%
 oa_works_author_collated <- oa_works_orcid %>% 
   full_join(.,author_collated, by = c("orcid_index","work_index")) %>% 
   relocate(author_list, .after = work_display_name) %>% 
-  select(doi, orcid_index, work_index,title, work_type, 
+  select(doi, orcid_search, orcid_index, work_index,title, work_type, 
          publication_year, source_display_name,author_list,
          everything())
 
@@ -352,3 +352,4 @@ top_authors <- oa_authors %>%
   group_by(author_display_name) %>% 
   tally() %>% 
   arrange(desc(n))
+
