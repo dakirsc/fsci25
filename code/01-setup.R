@@ -25,6 +25,9 @@ install.packages('inops')
 install.packages("png")
 install.packages("repurrrsive")
 install.packages("listviewer")
+install.packages("httr2")
+install.packages("openalexR")
+install.packages("patchwork")
 
 # load the packages
 library(dplyr)
@@ -50,6 +53,9 @@ library(png)
 library(repurrrsive)
 library(purrr)
 library(listviewer)
+library(httr2)
+library(openalexR)
+library(patchwork)
 
 # Set up orcid ------------------------------------------------------------
 
