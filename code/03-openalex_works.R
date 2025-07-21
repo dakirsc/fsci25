@@ -43,10 +43,10 @@ openalex_api_url <- paste0("https://api.openalex.org/works?filter=authorships.au
 ######################################################### 
 ######### when running on your own,######################
 ######### you can run a larger set of ORCID iDs ######### 
-######### but we will be using the first 40 here ######## 
+######### but we will be using the first 20 here ######## 
 ######################################################### 
 
-# loop through first 40 ORCID iDs
+# loop through first 20 ORCID iDs
 # create API query
 # run the query for "works"
 # obtain available metadata & add to oa_df_openr dataframe
@@ -62,10 +62,10 @@ safe_oa_request <- safely(oa_request)
 
 ###################################################
 ## When you run this on your own after the class,##
-#### replace the 1:40 with 1:length(orcid_list) ###
+#### replace the 1:20 with 1:length(orcid_list) ###
 ###################################################
 
-for(orcid in 1:40){
+for(orcid in 1:20){
   print(paste0("Loop ",orcid)) # keep track of which loop we are in
   
   oa_pull = safe_oa_request(query_url = openalex_api_url[orcid]) # create the API request
@@ -133,10 +133,10 @@ oa_authors <- data.frame()
 
 ###################################################
 ## When you run this on your own after the class,##
-#### replace the 1:40 with 1:length(orcid_list) ###
+#### replace the 1:20 with 1:length(orcid_list) ###
 ###################################################
 
-for(orcid in 1:40){
+for(orcid in 1:20){
   print(paste0("Loop ",orcid)) # keep track of which loop we are in
   
   if(!any(oa_works_orcid$orcid_index == orcid)) { # skips ORCID iDs not in dataset
@@ -232,8 +232,7 @@ max(oa_works_orcid$work_index)
 
 # histogram of number of works from each author
 # you can adjust the number of bins (breaks) if you want
-hist(oa_works_orcid$work_index,
-     breaks = 20)
+hist(oa_works_orcid$orcid_index)
 
 # count up the number of each work type
 # and order them from most to least prevalent
