@@ -30,7 +30,7 @@ rm(list = ls())
 
 # read in the openalex/orcid merge data
 # and trim DOI so that it only contains the DOI, not https://doi.org/
-oa_works_orcid <- read_csv("data/raw/openalex_orcid_works.csv") %>% 
+oa_works_orcid <- read_csv("data/results/openalex_orcid_works.csv") %>% 
   mutate(doi = str_replace(doi,
                            "https://doi.org/",
                            ""))
@@ -339,7 +339,8 @@ pub_year_up <- subset_unpaywall_df %>%
 pub_year_oa <- subset_unpaywall_df %>% 
   ggplot(aes(x = publication_year, 
              fill = is_oa_oa)) +
-  geom_bar(color = "black") +
+  geom_bar(color = "black",
+           position = position_stack(reverse = TRUE)) +
   scale_fill_manual(values = c("TRUE" = "#00BFC4",
                                "FALSE" = "#F8766D"),
                     na.value = "gray70",
